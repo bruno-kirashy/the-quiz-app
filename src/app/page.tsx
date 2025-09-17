@@ -7,15 +7,32 @@ const App = () => {
   const [phase, setPhase] = useState<number>(0);
   const [percentage, setPercentage] = useState<number>(0);
   const [wins , setWins] = useState<number>(0);
+  const [clickedAnswer, setClickedAnswer] = useState<number | null>(null);
+  const [wrongAnswer, setWrongAnswer] = useState<boolean>(false);
 
-  const percentageUpdate = () => {
-    const percentageCalc = ((phase + 1) / questionsData.length * 100);
-    setPercentage(percentageCalc);
+  const phaseUpdate = () => {
+    if (phase !== questionsData.length -1) {
+      if (clickedAnswer !== null) {
+      const percentageCalc = ((phase + 1) / questionsData.length * 100);
+      setPercentage(percentageCalc);
+      setPhase(phase + 1)
+      setClickedAnswer(null);
+      }
+    } else {
+      alert('Fim de jogo!')
+      setPhase(0);
+      setWins(0);
+      setPercentage(0);
+      setClickedAnswer(null);
+    }
   } 
 
   const handleAnswer = (index:number) => {
-    if (index === questionsData[phase].correct) {
+    if (index === questionsData[phase].correct && clickedAnswer === null) {
       setWins(w => wins + 1);
+      setClickedAnswer(index);
+    } else {
+      setWrongAnswer(true);
     }
   }
 
@@ -25,12 +42,19 @@ const App = () => {
   return(
     <section className="w-full h-dvh bg-white/90 flex justify-center items-center">
       <div className="bg-white shadow-2xl shadow-black-50 h-dvh w-2xl rounded-2xl p-5 md:h-auto md:p-12">
-        <div className="w-full flex items-center">
-            <span className="bg-blue-700 text-5xl font-bold w-14 h-14 mb-10 mr-5 rounded-lg p-5 flex justify-center items-center">
-              ?
-            </span>
-            <h1 className="text-black font-bold text-5xl mb-10">
-              Quiz
+        <div className="w-full flex justify-between">
+          
+            <div className='flex'>
+              <span className="bg-blue-700 text-5xl font-bold w-14 h-14 mb-10 mr-5 rounded-lg p-5 flex justify-center items-center">
+                ?
+              </span>
+              <h1 className="text-black font-bold text-5xl pt-1">
+                Quiz
+              </h1>
+            </div>
+
+            <h1 className='text-black font-light text-2xl pt-4'>
+              Pontos: {wins}
             </h1>
         </div>
 
@@ -50,26 +74,26 @@ const App = () => {
         <ul className="w-auto font-sans text-gray-700 flex flex-col gap-3">
                 <li 
                 onClick={() => handleAnswer(0)} 
-                className={`flex-1 flex justify-center cursor-pointer bg-gray-200 border-4 border-gray-300 shadow-md hover:shadow-blue-400/50 hover:border-blue-400/80 md:hover:pl-8 md:justify-start transition-all duration-300 rounded-md md:pl-5 py-2 text-3xl`}>
-                {questionsData[phase].answers[0]}
+                className={`flex-1 flex justify-center cursor-pointer bg-gray-200 border-4 border-gray-300 shadow-md md:hover:pl-8 md:justify-start transition-all duration-300 rounded-md md:pl-5 py-2 text-3xl ${clickedAnswer === 0 ? 'bg-green-500/50 border-green-500/80 shadow-green-500/50' : 'hover:border-blue-400/80 hover:shadow-blue-400/50'}`}>
+                 {questionsData[phase].answers[0]}
                 </li>
                 <li 
                 onClick={() => handleAnswer(1)}
-                className="flex-1 flex justify-center cursor-pointer bg-gray-200 border-4 border-gray-300 shadow-md hover:shadow-blue-400/50 hover:border-blue-400/80 md:hover:pl-8 md:justify-start transition-all duration-300 rounded-md md:pl-5 py-2 text-3xl">
-                {questionsData[phase].answers[1]}
+                className={`flex-1 flex justify-center cursor-pointer bg-gray-200 border-4 border-gray-300 shadow-md  md:hover:pl-8 md:justify-start transition-all duration-300 rounded-md md:pl-5 py-2 text-3xl ${clickedAnswer === 1 ? 'bg-green-500/50 border-green-500/80 shadow-green-500/50' : 'hover:border-blue-400/80 hover:shadow-blue-400/50'}`}>
+                 {questionsData[phase].answers[1]}
                 </li>
                 <li
                 onClick={() => handleAnswer(2)} 
-                className="flex-1 flex justify-center cursor-pointer bg-gray-200 border-4 border-gray-300 shadow-md hover:shadow-blue-400/50 hover:border-blue-400/80 md:hover:pl-8 md:justify-start transition-all duration-300 rounded-md md:pl-5 py-2 text-3xl">
-                {questionsData[phase].answers[2]}
+                className={`flex-1 flex justify-center cursor-pointer bg-gray-200 border-4 border-gray-300 shadow-md  md:hover:pl-8 md:justify-start transition-all duration-300 rounded-md md:pl-5 py-2 text-3xl ${clickedAnswer === 2 ? 'bg-green-500/50 border-green-500/80 shadow-green-500/50' : 'hover:border-blue-400/80 hover:shadow-blue-400/50'}`}>
+                 {questionsData[phase].answers[2]}
                 </li>
                 <li 
                 onClick={() => handleAnswer(3)}
-                className="flex-1 flex justify-center cursor-pointer bg-gray-200 border-4 border-gray-300 shadow-md hover:shadow-blue-400/50 hover:border-blue-400/80 md:hover:pl-8 md:justify-start transition-all duration-300 rounded-md md:pl-5 py-2 text-3xl">
-                {questionsData[phase].answers[3]}
+                className={`flex-1 flex justify-center cursor-pointer bg-gray-200 border-4 border-gray-300 shadow-md  md:hover:pl-8 md:justify-start transition-all duration-300 rounded-md md:pl-5 py-2 text-3xl ${clickedAnswer === 3 ? 'bg-green-500/50 border-green-500/80 shadow-green-500/50' : 'hover:border-blue-400/80 hover:shadow-blue-400/50'}`}>
+                 {questionsData[phase].answers[3]}
                 </li>
 
-            <button onClick={percentageUpdate} className="flex-1 flex justify-center items-center cursor-pointer bg-blue-500 shadow-md hover:shadow-blue-400/80 rounded-md text-white text-4xl p-4 mt-5" >
+            <button onClick={phaseUpdate} className="flex-1 flex justify-center items-center cursor-pointer bg-blue-500 shadow-md hover:shadow-blue-400/80 rounded-md text-white text-4xl p-4 mt-5" >
               PRÓXIMA 
               <ArrowRight className='w-9 h-9'/>
             </button>
