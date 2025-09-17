@@ -8,7 +8,7 @@ const App = () => {
   const [percentage, setPercentage] = useState<number>(0);
   const [wins , setWins] = useState<number>(0);
   const [clickedAnswer, setClickedAnswer] = useState<number | null>(null);
-  const [wrongAnswer, setWrongAnswer] = useState<boolean>(false);
+  const [blockNav, setBlockNav] = useState<boolean>(false);
 
   const phaseUpdate = () => {
     if (phase !== questionsData.length -1) {
@@ -17,6 +17,7 @@ const App = () => {
       setPercentage(percentageCalc);
       setPhase(phase + 1)
       setClickedAnswer(null);
+      setBlockNav(false);
       }
     } else {
       alert('Fim de jogo!')
@@ -24,15 +25,20 @@ const App = () => {
       setWins(0);
       setPercentage(0);
       setClickedAnswer(null);
+      setBlockNav(false);
     }
   } 
 
   const handleAnswer = (index:number) => {
-    if (index === questionsData[phase].correct && clickedAnswer === null) {
-      setWins(w => wins + 1);
-      setClickedAnswer(index);
+    if(blockNav === true) {
+      return;
     } else {
-      setWrongAnswer(true);
+        if (index === questionsData[phase].correct && clickedAnswer === null) {
+        setWins(w => wins + 1);
+        setClickedAnswer(index);
+        }
+        setClickedAnswer(index);
+        setBlockNav(true);
     }
   }
 
@@ -72,26 +78,20 @@ const App = () => {
         </div>
         
         <ul className="w-auto font-sans text-gray-700 flex flex-col gap-3">
-                <li 
-                onClick={() => handleAnswer(0)} 
-                className={`flex-1 flex justify-center cursor-pointer bg-gray-200 border-4 border-gray-300 shadow-md md:hover:pl-8 md:justify-start transition-all duration-300 rounded-md md:pl-5 py-2 text-3xl ${clickedAnswer === 0 ? 'bg-green-500/50 border-green-500/80 shadow-green-500/50' : 'hover:border-blue-400/80 hover:shadow-blue-400/50'}`}>
-                 {questionsData[phase].answers[0]}
-                </li>
-                <li 
-                onClick={() => handleAnswer(1)}
-                className={`flex-1 flex justify-center cursor-pointer bg-gray-200 border-4 border-gray-300 shadow-md  md:hover:pl-8 md:justify-start transition-all duration-300 rounded-md md:pl-5 py-2 text-3xl ${clickedAnswer === 1 ? 'bg-green-500/50 border-green-500/80 shadow-green-500/50' : 'hover:border-blue-400/80 hover:shadow-blue-400/50'}`}>
-                 {questionsData[phase].answers[1]}
-                </li>
-                <li
-                onClick={() => handleAnswer(2)} 
-                className={`flex-1 flex justify-center cursor-pointer bg-gray-200 border-4 border-gray-300 shadow-md  md:hover:pl-8 md:justify-start transition-all duration-300 rounded-md md:pl-5 py-2 text-3xl ${clickedAnswer === 2 ? 'bg-green-500/50 border-green-500/80 shadow-green-500/50' : 'hover:border-blue-400/80 hover:shadow-blue-400/50'}`}>
-                 {questionsData[phase].answers[2]}
-                </li>
-                <li 
-                onClick={() => handleAnswer(3)}
-                className={`flex-1 flex justify-center cursor-pointer bg-gray-200 border-4 border-gray-300 shadow-md  md:hover:pl-8 md:justify-start transition-all duration-300 rounded-md md:pl-5 py-2 text-3xl ${clickedAnswer === 3 ? 'bg-green-500/50 border-green-500/80 shadow-green-500/50' : 'hover:border-blue-400/80 hover:shadow-blue-400/50'}`}>
-                 {questionsData[phase].answers[3]}
-                </li>
+                {questionsData[phase].answers.map((item,index) => (
+                  <li
+                    key={index}
+                    onClick={() => handleAnswer(index)} 
+                    className={`flex-1 flex justify-center cursor-pointer bg-gray-200 border-4 border-gray-300 shadow-md md:hover:pl-8 md:justify-start transition-all duration-300 rounded-md md:pl-5 py-2 text-3xl 
+                    ${clickedAnswer === index ? 'bg-green-500/50 border-green-500/80 shadow-green-500/50' : 'hover:border-blue-400/80 hover:shadow-blue-400/50'} 
+                    ${clickedAnswer === index && questionsData[phase].correct !== index ? 'bg-red-500/50 border-red-500/80 shadow-red-500/50' : ''}`}>
+                    
+                    {item}
+                  </li>
+                ))
+
+                }
+                
 
             <button onClick={phaseUpdate} className="flex-1 flex justify-center items-center cursor-pointer bg-blue-500 shadow-md hover:shadow-blue-400/80 rounded-md text-white text-4xl p-4 mt-5" >
               PRÓXIMA 
