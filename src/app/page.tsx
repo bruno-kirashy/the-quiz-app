@@ -4,7 +4,24 @@ import { questionsData } from './data/Questions';
 import { useState } from 'react';
 
 const App = () => {
-  const [phase, setPhase] = useState<number>(0)
+  const [phase, setPhase] = useState<number>(0);
+  const [percentage, setPercentage] = useState<number>(0);
+  const [wins , setWins] = useState<number>(0);
+
+  const percentageUpdate = () => {
+    const percentageCalc = ((phase + 1) / questionsData.length * 100);
+    setPercentage(percentageCalc);
+  } 
+
+  const handleAnswer = (index:number) => {
+    if (index === questionsData[phase].correct) {
+      setWins(w => wins + 1);
+    }
+  }
+
+
+
+
   return(
     <section className="w-full h-dvh bg-white/90 flex justify-center items-center">
       <div className="bg-white shadow-2xl shadow-black-50 h-dvh w-2xl rounded-2xl p-5 md:h-auto md:p-12">
@@ -26,30 +43,33 @@ const App = () => {
             </p>
             
             <div className="w-full bg-blue-500/20 h-2 rounded-2xl mb-8">
-              <div className="w-[70%] bg-gradient-to-r from-blue-800 to-blue-400/50 h-2 rounded-2xl"></div>
+              <div style={{width:`${percentage}%`}} className={` transition-all duration-1000 bg-gradient-to-r from-blue-800 to-blue-400/50 h-2 rounded-2xl`}></div>
             </div>
         </div>
         
         <ul className="w-auto font-sans text-gray-700 flex flex-col gap-3">
-            {questionsData.map((item,index)=> (
-              <>
-                <li className="flex-1 flex justify-center cursor-pointer bg-gray-200 border-4 border-gray-300 shadow-md hover:shadow-blue-400/50 hover:border-blue-400/80 md:hover:pl-8 md:justify-start transition-all duration-300 rounded-md md:pl-5 py-2 text-3xl">
+                <li 
+                onClick={() => handleAnswer(0)} 
+                className={`flex-1 flex justify-center cursor-pointer bg-gray-200 border-4 border-gray-300 shadow-md hover:shadow-blue-400/50 hover:border-blue-400/80 md:hover:pl-8 md:justify-start transition-all duration-300 rounded-md md:pl-5 py-2 text-3xl`}>
                 {questionsData[phase].answers[0]}
                 </li>
-                <li className="flex-1 flex justify-center cursor-pointer bg-gray-200 border-4 border-gray-300 shadow-md hover:shadow-blue-400/50 hover:border-blue-400/80 md:hover:pl-8 md:justify-start transition-all duration-300 rounded-md md:pl-5 py-2 text-3xl">
+                <li 
+                onClick={() => handleAnswer(1)}
+                className="flex-1 flex justify-center cursor-pointer bg-gray-200 border-4 border-gray-300 shadow-md hover:shadow-blue-400/50 hover:border-blue-400/80 md:hover:pl-8 md:justify-start transition-all duration-300 rounded-md md:pl-5 py-2 text-3xl">
                 {questionsData[phase].answers[1]}
                 </li>
-                <li className="flex-1 flex justify-center cursor-pointer bg-gray-200 border-4 border-gray-300 shadow-md hover:shadow-blue-400/50 hover:border-blue-400/80 md:hover:pl-8 md:justify-start transition-all duration-300 rounded-md md:pl-5 py-2 text-3xl">
+                <li
+                onClick={() => handleAnswer(2)} 
+                className="flex-1 flex justify-center cursor-pointer bg-gray-200 border-4 border-gray-300 shadow-md hover:shadow-blue-400/50 hover:border-blue-400/80 md:hover:pl-8 md:justify-start transition-all duration-300 rounded-md md:pl-5 py-2 text-3xl">
                 {questionsData[phase].answers[2]}
                 </li>
-                <li className="flex-1 flex justify-center cursor-pointer bg-gray-200 border-4 border-gray-300 shadow-md hover:shadow-blue-400/50 hover:border-blue-400/80 md:hover:pl-8 md:justify-start transition-all duration-300 rounded-md md:pl-5 py-2 text-3xl">
+                <li 
+                onClick={() => handleAnswer(3)}
+                className="flex-1 flex justify-center cursor-pointer bg-gray-200 border-4 border-gray-300 shadow-md hover:shadow-blue-400/50 hover:border-blue-400/80 md:hover:pl-8 md:justify-start transition-all duration-300 rounded-md md:pl-5 py-2 text-3xl">
                 {questionsData[phase].answers[3]}
                 </li>
-              </>
-            ))}
-          
-            
-            <button className="flex-1 flex justify-center items-center cursor-pointer bg-blue-500 shadow-md hover:shadow-blue-400/80 rounded-md text-white text-4xl p-4 mt-5" >
+
+            <button onClick={percentageUpdate} className="flex-1 flex justify-center items-center cursor-pointer bg-blue-500 shadow-md hover:shadow-blue-400/80 rounded-md text-white text-4xl p-4 mt-5" >
               PRÓXIMA 
               <ArrowRight className='w-9 h-9'/>
             </button>
