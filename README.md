@@ -18,7 +18,7 @@ O projeto conta com uma interface limpa e responsiva, incluindo um tema claro e 
 
 ![Prévia do Projeto](./public/2025-09-18%2020-33-48.gif)
 
-## ☁️[ Clique aqui para acessar o site na nuvem!]()
+## ☁️[ Clique aqui para acessar o site na nuvem!](https://the-quiz-app-mu.vercel.app)
 
 
 ## ✨ Funcionalidades
@@ -68,3 +68,12 @@ npm run dev
 yarn dev
 
 # 5. Abra http://localhost:3000 no seu navegador para ver o resultado.
+```
+
+
+## 👨‍💻 Autor
+
+Feito com ❤️ por **Bruno Santos Silva**
+
+- **LinkedIn:** [https://www.linkedin.com/in/bruno-santos-silva](https://www.linkedin.com/in/bruno-santos-silva-8091b6378)
+- **GitHub:** [@bruno-kirashy](https://github.com/bruno-kirashy)
